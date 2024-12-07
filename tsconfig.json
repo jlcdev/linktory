@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "baseUrl": "./", // Alias base path
+    "paths": {
+      "@controllers/*": ["src/controllers/*"],
+      "@services/*": ["src/services/*"],
+      "@repositories/*": ["src/repositories/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@routes/*": ["src/routes/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@exceptions/*": ["src/exceptions/*"],
+      "@shared/*": ["src/shared/*"]
+    },
+    "skipLibCheck": true,
+    "removeComments": true,
+    "sourceMap": true
+  },
+  "include":["src"],
+  "exclude":["node_modules","dist", "client", "prisma"],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
+}
