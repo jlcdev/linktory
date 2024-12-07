@@ -1,7 +1,7 @@
 {
   "name": "linktory",
-  "description": "",
-  "version": "0.0.1",
+  "description": "Web application to manage links on your local network ",
+  "version": "0.1.0",
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
