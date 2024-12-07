@@ -1,9 +1,15 @@
 import { Router } from "express"
 import { PrismaClient } from "@prisma/client"
 import UserRepository from "@repositories/UserRepository"
+import TagRepository from "@repositories/TagRepository"
 import UserService from "@services/UserService"
+import TagService from "@services/TagService"
 import LoginUserController from "@controllers/user/LoginUserController"
 import RegisterUserController from "@controllers/user/RegisterUserController"
+import CreateTagController from "@controllers/tag/CreateTagController"
+import DeleteTagController from "@controllers/tag/DeleteTagController"
+import GetAllTagController from "@controllers/tag/GetAllTagController"
+import CheckTokenMiddleware from "@middlewares/user/CheckTokenMiddleware"
 import Validation from "@shared/Validation"
 import Security from "@shared/Security"
 
@@ -14,9 +20,14 @@ const security = new Security()
 
 // <Repositories>
 const userRepository = new UserRepository(prismaClient)
+const tagRepository = new TagRepository(prismaClient)
 
 // <Services>
 const userService = new UserService(userRepository, validation, security)
+const tagService = new TagService(tagRepository, validation)
+
+// <Middlewares>
+const checkTokenMiddleware = new CheckTokenMiddleware(security)
 
 // <Controllers>
 
@@ -24,14 +35,25 @@ const userService = new UserService(userRepository, validation, security)
 const loginUserController = new LoginUserController(userService, security)
 const registerUserController = new RegisterUserController(userService)
 
+// Tag Controllers
+const createTagController = new CreateTagController(tagService)
+const deletetagController = new DeleteTagController(tagService)
+const getAllTagController = new GetAllTagController(tagService)
+
 // Routes
 const userRoutes = Router()
 userRoutes.post('/login', loginUserController.run)
 userRoutes.post('/register', registerUserController.run)
 
+const tagRoutes = Router()
+tagRoutes.get('/', getAllTagController.run)
+tagRoutes.post('/', createTagController.run)
+tagRoutes.delete('/:tagId', deletetagController.run)
+
 
 const router = Router()
 
 router.use('/users', userRoutes)
+router.use('/tags', checkTokenMiddleware.run, tagRoutes)
 
 export default router
